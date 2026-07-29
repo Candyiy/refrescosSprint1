@@ -5,6 +5,7 @@ use App\Http\Controllers\DevolucionController;
 use App\Http\Controllers\OfertaController;
 use App\Http\Controllers\PreventaController;
 use App\Http\Controllers\RutaController;
+use App\Http\Controllers\ProductoController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -34,3 +35,5 @@ Route::resource('rutas', RutaController::class);
 Route::resource('devoluciones', DevolucionController::class)->parameters([
     'devoluciones' => 'devolucion'
 ]);
+
+Route::resource('productos', ProductoController::class);

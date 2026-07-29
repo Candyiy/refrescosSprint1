@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Devolucion;
 use App\Models\Preventa;
+use App\Models\Producto;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
 
@@ -38,7 +39,24 @@ class DevolucionController extends Controller
     public function store(Request $request)
     {
         $data = $this->validarDatos($request);
-        Devolucion::create($data);
+        $devolucion = Devolucion::create($data);
+        $preventa = Preventa::find($devolucion->idPreventa);
+        if ($preventa) {
+
+            $detalles = $preventa->detalles;
+            foreach ($detalles as $detalle) {
+                $producto = Producto::find($detalle->idProducto);
+
+                if ($producto) {
+                    $producto->stock += $detalle->cantidad;
+                    $producto->save();
+
+}
+
+
+}
+
+}
 
         return redirect()->route('devoluciones.index')
             ->with('success', 'Devolución registrada correctamente.');

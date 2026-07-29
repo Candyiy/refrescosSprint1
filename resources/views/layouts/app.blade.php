@@ -14,10 +14,12 @@
             <div>
                 <a href="{{ route('preventas.index') }}" class="btn btn-outline-light btn-sm me-2">Preventas</a>
                 <a href="{{ route('ofertas.index') }}" class="btn btn-outline-light btn-sm me-2">Ofertas</a>
+            <a href="{{ route('productos.index') }}" class="btn btn-outline-info">Productos</a>
                 <a href="{{ route('camiones.index') }}" class="btn btn-outline-light btn-sm me-2">Camiones</a>
                 <a href="{{ route('rutas.index') }}" class="btn btn-outline-light btn-sm me-2">Rutas</a>
                 <a href="{{ route('devoluciones.index') }}" class="btn btn-outline-light btn-sm">Devoluciones</a>
                 <a href="{{ route('reportes.index') }}" class="btn btn-outline-warning">Reportes</a>
+
             </div>
         </div>
     </nav>
