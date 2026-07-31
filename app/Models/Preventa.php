@@ -43,12 +43,18 @@ class Preventa extends Model
 
     public function cliente()
     {
-        return $this->belongsTo(Cliente::class, 'idCliente', 'idCliente');
+        return $this->belongsTo(
+            Cliente::class, 
+            'idCliente', 
+            'idCliente');
     }
 
     public function preventista()
     {
-        return $this->belongsTo(Usuario::class, 'idPreventista', 'idUsuario');
+        return $this->belongsTo(
+            Usuario::class, 
+            'idPreventista', 
+            'idUsuario');
     }
 
     public function detalles()
@@ -59,5 +65,17 @@ class Preventa extends Model
     public function calcularTotal(): float
     {
         return (float) $this->detalles()->sum('subtotal');
+    }
+    public function rutas()
+    {
+        return $this->belongsToMany(
+            Ruta::class,
+            'ruta_preventa',
+            'idPreventa',
+            'idRuta',
+            'idPreventa',
+            'idRuta'
+        )->withPivot('fechaAsignacion')
+         ->withTimestamps();
     }
 }

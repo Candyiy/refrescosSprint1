@@ -37,3 +37,18 @@ Route::resource('devoluciones', DevolucionController::class)->parameters([
 ]);
 
 Route::resource('productos', ProductoController::class);
+
+Route::get(
+    '/rutas/{ruta}/pedidos',
+    [RutaController::class, 'pedidos']
+)->name('rutas.pedidos');
+
+Route::post(
+    '/rutas/{ruta}/pedidos',
+    [RutaController::class, 'asignarPedido']
+)->name('rutas.asignarPedido');
+
+Route::delete(
+    '/rutas/{ruta}/pedidos/{idPreventa}',
+    [RutaController::class, 'quitarPedido']
+)->name('rutas.quitarPedido');

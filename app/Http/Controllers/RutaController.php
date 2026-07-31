@@ -6,6 +6,112 @@ use Illuminate\Http\Request;
 
 class RutaController extends Controller
 {
+    public function pedidos(Ruta $ruta)
+    {
+        $preventas = \App\Models\Preventa::with('cliente')
+            ->whereIn('estado', ['Pendiente', 'En Reparto'])
+            ->whereDoesntHave('rutas')
+            ->orderBy('fecha', 'desc')
+            ->get();
+
+        $pedidosAsignados = $ruta->preventas()
+            ->with('cliente')
+            ->orderBy('fecha', 'desc')
+            ->get();
+
+        return view('rutas.pedidos', compact(
+            'ruta',
+            'preventas',
+            'pedidosAsignados'
+        ));
+    }
+
+    public function asignarPedido(Request $request, Ruta $ruta)
+    {
+        $request->validate([
+            'idPreventas' => 'required|array|min:1',
+            'idPreventas.*' => 'exists:preventas,idPreventa',
+        ], [
+            'idPreventas.required' => 'Debe seleccionar al menos un pedido.',
+            'idPreventas.min' => 'Debe seleccionar al menos un pedido.',
+        ]);
+
+        $preventas = \App\Models\Preventa::whereIn(
+            'idPreventa',
+            $request->idPreventas
+        )->get();
+
+        $asignados = 0;
+        $yaAsignados = 0;
+
+        foreach ($preventas as $preventa) {
+
+            // Comprobar si ya pertenece a alguna ruta
+            if ($preventa->rutas()->exists()) {
+
+                $yaAsignados++;
+
+                continue;
+            }
+
+            // Asignar preventa a la ruta
+            $ruta->preventas()->attach(
+                $preventa->idPreventa,
+                [
+                    'fechaAsignacion' => now()->toDateString(),
+                ]
+            );
+
+            // Cambiar estado
+            $preventa->update([
+                'estado' => 'En Reparto'
+            ]);
+
+            $asignados++;
+        }
+
+        if ($asignados == 0) {
+
+            return redirect()
+                ->route('rutas.pedidos', $ruta)
+                ->with(
+                    'error',
+                    'Los pedidos seleccionados ya están asignados a una ruta.'
+                );
+        }
+
+        $mensaje = $asignados . ' pedido(s) asignado(s) correctamente.';
+
+        if ($yaAsignados > 0) {
+
+            $mensaje .= ' ' .
+                $yaAsignados .
+                ' pedido(s) ya estaban asignados a otra ruta.';
+
+        }
+
+        return redirect()
+            ->route('rutas.pedidos', $ruta)
+            ->with('success', $mensaje);
+    }
+
+    public function quitarPedido(Ruta $ruta, $idPreventa)
+    {
+        $ruta->preventas()->detach($idPreventa);
+
+        $preventa = \App\Models\Preventa::find($idPreventa);
+
+        if ($preventa) {
+            $preventa->update([
+                'estado' => 'Pendiente'
+            ]);
+        }
+
+        return redirect()
+            ->route('rutas.pedidos', $ruta)
+            ->with('success', 'Pedido retirado de la ruta.');
+    }
+
     public function index(Request $request)
     {
         $query = Ruta::query();

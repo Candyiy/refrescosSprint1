@@ -38,6 +38,12 @@
                                 <button class="btn btn-sm btn-danger">Dar de baja</button>
                             </form>
                         @endif
+                        <a href="{{ route('rutas.pedidos', $r) }}"
+                            class="btn btn-sm btn-secondary">
+
+                                Asignar Pedido
+
+                            </a>
                     </td>
                 </tr>
             @empty
