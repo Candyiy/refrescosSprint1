@@ -12,9 +12,17 @@
             </p>
         </div>
         <div>
-            <a href="{{ route('preventas.create') }}" class="btn btn-primary shadow-sm fw-bold">
-                <i class="bi bi-plus-lg"></i> + Nueva Preventa
-            </a>
+            @if(in_array(auth()->user()->rol->nombre, ['Administrador', 'Preventista']))
+
+                <a href="{{ route('preventas.create') }}"
+                class="btn btn-primary shadow-sm fw-bold">
+
+                    <i class="bi bi-plus-lg"></i>
+                    + Nueva Preventa
+
+                </a>
+
+            @endif
         </div>
     </div>
 
@@ -200,9 +208,16 @@
                         <a href="{{ route('camiones.index') }}" class="btn btn-light fw-bold text-primary btn-sm">
                             Gestionar Camiones
                         </a>
-                        <a href="{{ route('rutas.index') }}" class="btn btn-outline-light btn-sm">
-                            Rutas de Cobertura
-                        </a>
+                        @if(in_array(auth()->user()->rol->nombre, ['Administrador', 'Repartidor']))
+
+                            <a href="{{ route('rutas.index') }}"
+                            class="btn btn-outline-light btn-sm">
+
+                                Rutas de Cobertura
+
+                            </a>
+
+                        @endif
                     </div>
                 </div>
             </div>

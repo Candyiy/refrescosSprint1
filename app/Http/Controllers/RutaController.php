@@ -3,12 +3,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Ruta;
 use Illuminate\Http\Request;
+use App\Models\Preventa;
 
 class RutaController extends Controller
 {
     public function pedidos(Ruta $ruta)
     {
-        $preventas = \App\Models\Preventa::with('cliente')
+        $preventas = Preventa::with('cliente')
             ->whereIn('estado', ['Pendiente', 'En Reparto'])
             ->whereDoesntHave('rutas')
             ->orderBy('fecha', 'desc')
@@ -36,7 +37,7 @@ class RutaController extends Controller
             'idPreventas.min' => 'Debe seleccionar al menos un pedido.',
         ]);
 
-        $preventas = \App\Models\Preventa::whereIn(
+        $preventas = Preventa::whereIn(
             'idPreventa',
             $request->idPreventas
         )->get();
@@ -99,7 +100,7 @@ class RutaController extends Controller
     {
         $ruta->preventas()->detach($idPreventa);
 
-        $preventa = \App\Models\Preventa::find($idPreventa);
+        $preventa = Preventa::find($idPreventa);
 
         if ($preventa) {
             $preventa->update([
