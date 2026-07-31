@@ -1,4 +1,4 @@
-```blade
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -180,40 +180,6 @@
                             </div>
 
 
-                            {{-- ROL --}}
-
-                            <div class="col-md-12 mb-3">
-
-                                <label class="form-label">
-                                    Rol
-                                </label>
-
-                                <select
-                                    name="idRol"
-                                    class="form-select"
-                                    required>
-
-                                    <option value="">
-                                        -- Seleccione un rol --
-                                    </option>
-
-                                    @foreach($roles as $rol)
-
-                                        <option
-                                            value="{{ $rol->idRol }}"
-                                            {{ old('idRol') == $rol->idRol ? 'selected' : '' }}>
-
-                                            {{ $rol->nombre }}
-
-                                        </option>
-
-                                    @endforeach
-
-                                </select>
-
-                            </div>
-
-
                             {{-- CONTRASEÑA --}}
 
                             <div class="col-md-6 mb-3">
@@ -288,4 +254,3 @@
 </body>
 
 </html>
-```
