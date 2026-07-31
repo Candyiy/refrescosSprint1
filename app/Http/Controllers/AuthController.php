@@ -60,16 +60,12 @@ class AuthController extends Controller
 
     public function showRegister()
     {
-        $roles = Rol::orderBy('nombre')->get();
-
-        return view('auth.register', compact('roles'));
+        return view('auth.register');
     }
 
     public function register(Request $request)
     {
         $request->validate([
-
-            'idRol' => 'required|exists:roles,idRol',
 
             'nombre' => 'required|string|max:255',
 
@@ -86,10 +82,6 @@ class AuthController extends Controller
             'contrasena' => 'required|string|min:6|confirmed',
 
         ], [
-
-            'idRol.required' => 'Seleccione un rol.',
-
-            'idRol.exists' => 'El rol seleccionado no existe.',
 
             'nombre.required' => 'Ingrese su nombre.',
 
@@ -116,9 +108,42 @@ class AuthController extends Controller
         ]);
 
 
+        /*
+        |--------------------------------------------------------------------------
+        | ASIGNAR ROL AUTOMÁTICAMENTE
+        |--------------------------------------------------------------------------
+        */
+
+        $cantidadUsuarios = Usuario::count();
+
+
+        if ($cantidadUsuarios === 0) {
+
+            // Primer usuario = Administrador
+            $rol = Rol::where('nombre', 'Administrador')->first();
+
+        } else {
+
+            // Usuarios posteriores = Cliente
+            $rol = Rol::where('nombre', 'Cliente')->first();
+
+        }
+
+
+        if (!$rol) {
+
+            return back()
+                ->withInput()
+                ->withErrors([
+                    'usuario' => 'No se encontró el rol correspondiente en la base de datos.'
+                ]);
+
+        }
+
+
         Usuario::create([
 
-            'idRol' => $request->idRol,
+            'idRol' => $rol->idRol,
 
             'nombre' => $request->nombre,
 
@@ -146,6 +171,7 @@ class AuthController extends Controller
                 'Cuenta creada correctamente. Ahora puede iniciar sesión.'
             );
     }
+
 
 
     /*
