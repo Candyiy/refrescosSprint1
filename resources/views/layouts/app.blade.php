@@ -10,11 +10,11 @@
 <body class="bg-light">
     <nav class="navbar navbar-dark bg-dark mb-4">
         <div class="container">
-            <span class="navbar-brand">Distribuidora de Refrescos</span>
+            <span class="navbar-brand">Distribuidora de Refrescos Mapocho</span>
             <div>
                 <a href="{{ route('preventas.index') }}" class="btn btn-outline-light btn-sm me-2">Preventas</a>
                 <a href="{{ route('ofertas.index') }}" class="btn btn-outline-light btn-sm me-2">Ofertas</a>
-            <a href="{{ route('productos.index') }}" class="btn btn-outline-info">Productos</a>
+                <a href="{{ route('productos.index') }}" class="btn btn-outline-info">Productos</a>
                 <a href="{{ route('camiones.index') }}" class="btn btn-outline-light btn-sm me-2">Camiones</a>
                 <a href="{{ route('rutas.index') }}" class="btn btn-outline-light btn-sm me-2">Rutas</a>
                 <a href="{{ route('devoluciones.index') }}" class="btn btn-outline-light btn-sm">Devoluciones</a>
